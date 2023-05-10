@@ -1,10 +1,60 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}      
+
+{% load crispy_forms_tags %}
+
+
+<div class="container py-5">
+  <h1>Find User by Username</h1>
+  <form method="POST">
+    {% csrf_token %}
+    {{ find_form|crispy }}
+    <button class="btn btn-primary" type="submit">Find</button>
+  </form>
+
+  {% if status == 1 %}
+  <div class="position-relative p-5 text-center text-muted bg-body border border-dashed rounded-5">
+    <h1 class="text-body-emphasis">Упс.... Вы пока не дружите с этим пользователем</h1>
+    <p class="col-lg-6 mx-auto mb-4">
+      Никогда не поздно это исправить. Смелее
+    </p>
+    <button class="btn btn-primary px-5 mb-5" type="submit" onclick="location.href='{% url 'service:send_friend_request' %}?username={{username}}'">
+      Отправить заявку в друзья
+    </button>
+  </div>
+  {% elif status == 2 %}
+  <div class="position-relative p-5 text-center text-muted bg-body border border-dashed rounded-5">
+    <h1 class="text-body-emphasis">Вашу заявку пока не приняли</h1>
+    <p class="col-lg-6 mx-auto mb-4">
+      Никогда не поздно обидеться на это. Поторопите вашего друга или удалите заявку
+    </p>
+    <button class="btn btn-primary px-5 mb-5" type="submit" onclick="location.href='{% url 'service:cancel_friend_request' %}?username={{username}}'">
+      Отменить заявку
+    </button>
+  </div>
+  {% elif status == 3 %}
+  <div class="position-relative p-5 text-center text-muted bg-body border border-dashed rounded-5">
+    <h1 class="text-body-emphasis">Пользователь отправил вам заявку в друзья</h1>
+    <p class="col-lg-6 mx-auto mb-4">
+      Ну нельзя же быть таким бездушным. Скорее прими заявку. Не обижай человека
+    </p>
+    <button class="btn btn-primary px-5 mb-5" type="submit" onclick="location.href='{% url 'service:send_friend_request' %}?username={{username}}'">
+      Принять заявку
+    </button>
+  </div>
+  {% elif status == 4 %}
+  <div class="position-relative p-5 text-center text-muted bg-body border border-dashed rounded-5">
+    <h1 class="text-body-emphasis">Пользователь у вас в друзьях</h1>
+    <p class="col-lg-6 mx-auto mb-4">
+      Вы дружите дружную дружбу. Но что если друг тебе надоел, или того хуже - как либо подставил или предал? Как минимум после этого стоит удалить его из друзей
+    </p>
+    <button class="btn btn-primary px-5 mb-5" type="submit" onclick="location.href='{% url 'service:cancel_friend_request' %}?username={{username}}'">
+      Удалить из друзей
+    </button>
+  </div>
+  {% endif %}
+
+</div>
+
+{% endblock %}
