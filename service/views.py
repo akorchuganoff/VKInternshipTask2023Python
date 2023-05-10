@@ -99,7 +99,6 @@ def find_user(request):
 
 def outgoing_friend_request_list(request):
     user = request.user
-    # outgoing = list(map(lambda x: x.username, OutgoingRequests.objects.filter(from_user_id=user.id).values_list("to_user_id").all()))
     outgoing =set(map(lambda x: x.to_user_id.username, OutgoingRequests.objects.filter(from_user_id=user.id).all()))
     ingoing = set(map(lambda x: x.from_user_id.username, IngoingRequests.objects.filter(to_user_id=user.id).all()))
 
@@ -110,13 +109,6 @@ def outgoing_friend_request_list(request):
     ingoing_result = ingoing.difference(outgoing)
 
     return render(request=request, template_name="service/outgoing.html", context={"outgoing": outgoing_result, "ingoing": ingoing_result, "friends": friends})
-
-def incoming_friend_request_list(request):
-    return None
-
-
-def friends(request):
-    return None
 
 
 def send_friend_request(request):

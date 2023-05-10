@@ -1,0 +1,113 @@
+openapi: 3.0.0
+info:
+  title: Сервис друзей OpenAPI спецификация
+  version: 0.0.1
+servers:
+  - url: http://127.0.0.1:8000/service/
+    description: Основной сервер
+paths:
+  /server/register:
+    get:
+      tags:
+        -  User Registration
+      summary: Форма для регистрация пользователя
+      responses:
+        '200':
+          description: Форма для регистрации
+    post:
+      tags:
+          -  User Registration
+      summary: Регистрация пользователя
+      responses:
+        '200':
+          description: Успешная регистрация
+        '406':
+          description: Ошибка регистрации
+  /server/login:
+    get:
+      tags:
+        -  User Registration
+      summary: Форма для логина
+      responses:
+        '200':
+          description: Возвращает форму для логина
+    
+    post:
+      tags:
+        -  User Registration
+      summary: Логин пользователя
+      responses:
+        '200':
+          description: Переход на главную страницу, с входом в учетку пользователя
+        '406':
+          description: Ошибка регистрации
+  /server/logout:
+    get:
+      tags:
+        -  User Registration
+      summary: Выход из учетной записи
+      responses:
+        '200':
+          description: Выход из записи
+          
+  /server/find_user:
+    get:
+        tags:
+          -  User Info
+        summary: Страница со строкой поиска
+        responses:
+          '200':
+            description: Поисковая строка, для поиска по Username
+      
+    post:
+      tags:
+        -  User Registration
+      summary: Поиск информации по Username, переданному в форму
+      responses:
+        '200':
+          description: Информация о пользователе выводится на странице
+        '404':
+          description: Пользователь не найден
+  /server/outgoing:
+    get:
+        tags:
+          -  User Info
+        summary: Страница с статистикой профиля. Отображаются все активные заявки и друзья
+        responses:
+          '200':
+            description: Списки с информацией
+            
+  /server/send_friend_request/{username}:
+    post:
+      tags:
+        -  User Relationshps
+      summary: Создание исходящей заявки
+      parameters:
+        - name: username
+          in: path
+          required: True
+          description: Username пользователя
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Перевод на главную страницу
+        '404':
+          description: Пользователь не найден
+  /server/cancel_friend_request/{username}:
+    post:
+      tags:
+        -  User Relationshps
+      summary: Удаление исходящей заявки
+      parameters:
+        - name: username
+          in: path
+          required: True
+          description: Username пользователя
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Перевод на главную страницу
+        '404':
+          description: Пользователь не найден
